@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { getIntentColor, formatMessageTime, getInitials } from '@/lib/helpers';
+import { ChannelBadge } from '@/components/ChannelBadge';
 
 interface ConversationListProps {
   conversations: Conversation[];
@@ -42,11 +43,14 @@ export function ConversationList({ conversations, selectedId, onSelect }: Conver
           >
             <Avatar className="h-12 w-12">
               <AvatarImage src={conversation.profilePicture} />
-              <AvatarFallback>{getInitials(conversation.instagramHandle)}</AvatarFallback>
+              <AvatarFallback>{getInitials(conversation.customerHandle)}</AvatarFallback>
             </Avatar>
             <div className="flex-1 overflow-hidden">
               <div className="flex items-start justify-between gap-2">
-                <p className="truncate font-medium">{conversation.instagramHandle}</p>
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  <ChannelBadge channel={conversation.channel} size="sm" />
+                  <p className="truncate font-medium">{conversation.customerName || conversation.customerHandle}</p>
+                </div>
                 <span className="shrink-0 text-xs text-muted-foreground">
                   {formatMessageTime(conversation.lastMessageTime)}
                 </span>
