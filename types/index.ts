@@ -1,3 +1,6 @@
+// Channel types - Support for Instagram, WhatsApp, and Messenger
+export type ChannelType = 'instagram' | 'whatsapp' | 'messenger';
+
 // Intent types for conversations and leads
 export type IntentType = 'Inquiry' | 'Order' | 'Payment' | 'Delivery' | 'Issue' | 'Other';
 
@@ -15,23 +18,31 @@ export interface Message {
   text: string;
   timestamp: Date;
   isFromCustomer: boolean;
+  channel: ChannelType;
 }
 
 // Conversation interface
 export interface Conversation {
   id: string;
-  instagramHandle: string;
+  channel: ChannelType;
+  customerHandle: string; // @username for IG, phone for WhatsApp, name for Messenger
+  customerName?: string; // Display name
   profilePicture?: string;
   lastMessage: string;
   lastMessageTime: Date;
   intent: IntentType;
   unreadCount?: number;
+  // Channel-specific IDs for external platforms
+  externalConversationId?: string;
+  externalCustomerId?: string;
 }
 
 // Lead interface
 export interface Lead {
   id: string;
-  instagramHandle: string;
+  channel: ChannelType;
+  customerHandle: string; // @username for IG, phone for WhatsApp, name for Messenger
+  customerName?: string;
   profilePicture?: string;
   intent: IntentType;
   status: LeadStatus;
@@ -40,6 +51,7 @@ export interface Lead {
   createdAt: Date;
   notes?: string;
   linkedOrders?: string[];
+  conversationId?: string; // Link to conversation
 }
 
 // Order interface
