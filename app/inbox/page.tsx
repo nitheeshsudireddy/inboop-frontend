@@ -6,10 +6,11 @@ import { LeadSnapshot } from '@/components/inbox/LeadSnapshot';
 import { mockMessages } from '@/lib/mockData';
 import { useUIStore } from '@/stores/useUIStore';
 import { useConversationStore } from '@/stores/useConversationStore';
+import { ConversationStatus } from '@/types';
 
 export default function InboxPage() {
   const { selectedConversationId, setSelectedConversationId } = useUIStore();
-  const { conversations, setConversationVIP } = useConversationStore();
+  const { conversations, setConversationVIP, setConversationStatus } = useConversationStore();
 
   const selectedConversation = selectedConversationId
     ? conversations.find((c) => c.id === selectedConversationId) || null
@@ -23,9 +24,15 @@ export default function InboxPage() {
     }
   };
 
+  const handleStatusChange = (status: ConversationStatus) => {
+    if (selectedConversationId) {
+      setConversationStatus(selectedConversationId, status);
+    }
+  };
+
   return (
     <div className="flex h-full overflow-hidden">
-      <div className="w-96 flex-shrink-0 border-r bg-gray-50 overflow-hidden">
+      <div className="w-[320px] flex-shrink-0 border-r bg-gray-50 overflow-hidden">
         <ConversationList
           conversations={conversations}
           selectedId={selectedConversationId}
@@ -40,10 +47,11 @@ export default function InboxPage() {
         />
       </div>
 
-      <div className="w-96 flex-shrink-0 border-l bg-white overflow-hidden">
+      <div className="w-[320px] flex-shrink-0 border-l bg-white overflow-hidden">
         <LeadSnapshot
           conversation={selectedConversation}
           onVIPChange={handleVIPChange}
+          onStatusChange={handleStatusChange}
         />
       </div>
     </div>

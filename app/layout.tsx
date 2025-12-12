@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
         <Providers>
-          <div className="flex h-screen flex-col overflow-hidden bg-background">
+          <div className="flex h-screen flex-col overflow-hidden bg-[#212121]">
             <GlobalHeader />
             <div className="flex flex-1 overflow-hidden">
               <Sidebar />

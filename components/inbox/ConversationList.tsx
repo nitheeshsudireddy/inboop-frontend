@@ -164,12 +164,7 @@ export default function ConversationList({
       return matchesSearch && matchesFilter;
     })
     .sort((a, b) => {
-      // Sort by unread first (conversations with unread messages at top)
-      const aUnread = a.unreadCount ?? 0;
-      const bUnread = b.unreadCount ?? 0;
-      if (aUnread > 0 && bUnread === 0) return -1;
-      if (aUnread === 0 && bUnread > 0) return 1;
-      // Then sort by most recent message
+      // Sort by most recent message (latest first)
       return b.lastMessageTime.getTime() - a.lastMessageTime.getTime();
     });
 
@@ -220,9 +215,9 @@ export default function ConversationList({
     <div className="h-full flex flex-col bg-gray-50">
       {/* Header */}
       <div className="p-4 bg-white border-b border-gray-200">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-gray-900 font-semibold">Conversations</h2>
-          <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-gray-900 font-semibold text-sm">Conversations</h2>
+          <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
             {filteredConversations.length}
           </span>
         </div>
@@ -234,22 +229,22 @@ export default function ConversationList({
           />
           <input
             type="text"
-            placeholder="Search by username or message..."
+            placeholder="Search..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all"
+            className="w-full pl-9 pr-3 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#2F5D3E] focus:border-[#2F5D3E] transition-all"
           />
         </div>
 
         {/* Channel Filters */}
-        <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+        <div className="flex gap-1.5 overflow-x-auto scrollbar-hide">
           {channelFilters.map((filter) => (
             <button
               key={filter.value}
               onClick={() => setActiveFilter(filter.value)}
-              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors flex items-center gap-1.5 flex-shrink-0 ${
+              className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors flex items-center gap-1 flex-shrink-0 ${
                 activeFilter === filter.value
-                  ? 'bg-gray-900 text-white'
+                  ? 'bg-[#2F5D3E] text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -261,33 +256,33 @@ export default function ConversationList({
       </div>
 
       {/* Conversation List */}
-      <div className="flex-1 overflow-y-auto p-3">
+      <div className="flex-1 overflow-y-auto p-2">
         {showEmptyState() || filteredConversations.map((conversation) => (
           <div
             key={conversation.id}
             onClick={() => onSelect(conversation.id)}
-            className={`mb-2 p-4 rounded-xl cursor-pointer transition-all border-l-[3px] ${
+            className={`mb-2 p-3 rounded-lg cursor-pointer transition-all border-l-[3px] ${
               selectedId === conversation.id
-                ? `bg-white shadow-md ${getPlatformBorderColor(conversation.channel)}`
-                : 'bg-transparent hover:bg-white/70 hover:shadow-sm border-l-transparent'
+                ? `bg-white shadow-sm ${getPlatformBorderColor(conversation.channel)}`
+                : 'bg-transparent hover:bg-white/70 border-l-transparent'
             }`}
           >
-            <div className="flex items-start gap-3">
+            <div className="flex items-start gap-2.5">
               {/* Avatar */}
               <div className="relative flex-shrink-0">
-                <div className="w-12 h-12 bg-[#1a1f2e] rounded-full flex items-center justify-center text-white font-medium">
+                <div className="w-10 h-10 bg-[#1a1f2e] rounded-full flex items-center justify-center text-white text-sm font-medium">
                   {getInitials(conversation.customerName)}
                 </div>
-                <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-sm">
-                  {getChannelIcon(conversation.channel)}
+                <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-white rounded-full flex items-center justify-center shadow-sm">
+                  {getChannelIcon(conversation.channel, 10)}
                 </div>
               </div>
 
               {/* Content */}
               <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5 min-w-0">
-                    <h3 className="font-semibold text-gray-900 truncate">
+                    <h3 className="font-medium text-gray-900 text-sm truncate">
                       {conversation.customerName || conversation.customerHandle}
                     </h3>
                     {conversation.isVIP && (
@@ -298,10 +293,10 @@ export default function ConversationList({
                     {formatRelativeTime(conversation.lastMessageTime)}
                   </span>
                 </div>
-                <p className="text-sm text-gray-600 truncate mb-2">
+                <p className="text-sm text-gray-600 truncate mt-0.5">
                   {conversation.lastMessage}
                 </p>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 mt-1.5">
                   <span
                     className={`px-2 py-0.5 rounded-full text-xs border ${getIntentStyle(
                       conversation.intent
@@ -310,7 +305,7 @@ export default function ConversationList({
                     {conversation.intent}
                   </span>
                   {(conversation.unreadCount ?? 0) > 0 && (
-                    <span className="px-2 py-0.5 rounded-full text-xs bg-gray-900 text-white">
+                    <span className="px-2 py-0.5 rounded-full text-xs bg-[#2F5D3E] text-white">
                       {conversation.unreadCount}
                     </span>
                   )}

@@ -38,7 +38,7 @@ export function Sidebar() {
   const unreadCounts = getUnreadCounts();
 
   return (
-    <div className="w-20 bg-white border-r border-gray-200 flex flex-col">
+    <div className="w-20 bg-[#212121] flex flex-col">
       <nav className="flex-1 px-3 pt-4">
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -56,13 +56,13 @@ export function Sidebar() {
                 href={item.href}
                 className={`w-full flex items-center justify-center h-12 mb-1 rounded-lg transition-all relative ${
                   isActive
-                    ? 'bg-gray-900 text-white shadow-sm'
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                    ? 'bg-[#2F5D3E] text-white shadow-sm'
+                    : 'text-[#CCCCCC] hover:bg-[#2d2d2d] hover:text-white'
                 }`}
               >
                 <Icon className="w-5 h-5" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-1 right-1 min-w-[18px] h-[18px] bg-red-500 rounded-full flex items-center justify-center text-[10px] font-medium text-white px-1">
+                  <span className="absolute top-1 right-1 min-w-[18px] h-[18px] bg-[#2F5D3E] rounded-full flex items-center justify-center text-[10px] font-medium text-white px-1">
                     {unreadCount}
                   </span>
                 )}
@@ -70,14 +70,14 @@ export function Sidebar() {
 
               {/* Tooltip */}
               {hoveredItem === item.name && (
-                <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-gray-900 text-white text-sm rounded-lg whitespace-nowrap z-50 pointer-events-none">
+                <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-[#2d2d2d] text-white text-sm rounded-lg whitespace-nowrap z-50 pointer-events-none">
                   <div className="flex items-center gap-2">
                     {item.name}
                     {unreadCount > 0 && (
-                      <span className="text-xs text-gray-400">({unreadCount} unread)</span>
+                      <span className="text-xs text-[#CCCCCC]">({unreadCount} unread)</span>
                     )}
                   </div>
-                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900"></div>
+                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-[#2d2d2d]"></div>
                 </div>
               )}
             </div>
@@ -96,8 +96,8 @@ export function Sidebar() {
             href="/settings"
             className={`w-full flex items-center justify-center h-12 rounded-lg transition-all ${
               pathname === '/settings' || pathname?.startsWith('/settings/')
-                ? 'bg-gray-900 text-white shadow-sm'
-                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                ? 'bg-[#2F5D3E] text-white shadow-sm'
+                : 'text-[#CCCCCC] hover:bg-[#2d2d2d] hover:text-white'
             }`}
           >
             <Settings className="w-5 h-5" />
@@ -105,33 +105,33 @@ export function Sidebar() {
 
           {/* Tooltip */}
           {hoveredItem === 'Settings' && (
-            <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-gray-900 text-white text-sm rounded-lg whitespace-nowrap z-50 pointer-events-none">
+            <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-[#2d2d2d] text-white text-sm rounded-lg whitespace-nowrap z-50 pointer-events-none">
               Settings
-              <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900"></div>
+              <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-[#2d2d2d]"></div>
             </div>
           )}
         </div>
       </div>
 
       {/* User profile at bottom */}
-      <div className="p-3 border-t border-gray-200">
+      <div className="p-3 border-t border-[#3d3d3d]">
         <div
           className="relative"
           onMouseEnter={() => setHoveredItem('Profile')}
           onMouseLeave={() => setHoveredItem(null)}
         >
-          <div className="w-full h-12 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors flex items-center justify-center">
-            <div className="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center">
-              <span className="text-white text-sm">{getInitials(user?.name)}</span>
+          <div className="w-full h-12 rounded-lg hover:bg-[#2d2d2d] cursor-pointer transition-colors flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-[#2F5D3E] flex items-center justify-center">
+              <span className="text-white text-sm font-medium">{getInitials(user?.name)}</span>
             </div>
           </div>
 
           {/* Tooltip */}
           {hoveredItem === 'Profile' && (
-            <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-gray-900 text-white text-sm rounded-lg whitespace-nowrap z-50 pointer-events-none">
+            <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-[#2d2d2d] text-white text-sm rounded-lg whitespace-nowrap z-50 pointer-events-none">
               <div>{user?.name || 'Guest'}</div>
-              <div className="text-xs text-gray-400">Admin</div>
-              <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900"></div>
+              <div className="text-xs text-[#CCCCCC]">Admin</div>
+              <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-[#2d2d2d]"></div>
             </div>
           )}
         </div>
