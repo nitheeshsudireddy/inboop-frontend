@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Inbox, Users, ShoppingBag, BarChart3, Settings } from 'lucide-react';
-import { useAuthStore } from '@/stores/useAuthStore';
+import { Home, Inbox, Users, ShoppingBag, BarChart3, Settings } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 import { mockConversations, mockOrders } from '@/lib/mockData';
 
 // Calculate unread counts
@@ -15,6 +15,7 @@ const getUnreadCounts = () => {
 };
 
 const navItems = [
+  { name: 'Home', href: '/home', icon: Home },
   { name: 'Inbox', href: '/inbox', icon: Inbox },
   { name: 'Leads', href: '/leads', icon: Users },
   { name: 'Orders', href: '/orders', icon: ShoppingBag },
@@ -33,7 +34,7 @@ const getInitials = (name?: string) => {
 
 export function Sidebar() {
   const pathname = usePathname();
-  const { user } = useAuthStore();
+  const { user } = useAuth();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const unreadCounts = getUnreadCounts();
 

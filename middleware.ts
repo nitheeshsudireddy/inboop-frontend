@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
   const isLocalhost = hostname.includes('localhost');
 
   // App routes that require authentication
-  const appRoutes = ['/inbox', '/leads', '/orders', '/analytics', '/settings'];
+  const appRoutes = ['/home', '/inbox', '/leads', '/orders', '/analytics', '/settings'];
   const isAppRoute = appRoutes.some(route => pathname.startsWith(route));
 
   // Marketing routes

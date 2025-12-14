@@ -59,6 +59,19 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* Ensure font consistency across all elements */
+  input,
+  textarea,
+  select,
+  button,
+  option {
+    font-family: inherit;
+  }
+
+  select option {
+    font-family: inherit;
+    font-weight: normal;
+  }
 }
 
 @layer utilities {

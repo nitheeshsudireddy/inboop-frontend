@@ -2,14 +2,14 @@
 
 import { User } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useAuthStore } from '@/stores/useAuthStore';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface TopBarProps {
   title: string;
 }
 
 export function TopBar({ title }: TopBarProps) {
-  const { user } = useAuthStore();
+  const { user } = useAuth();
 
   return (
     <div className="flex h-16 items-center justify-between border-b bg-card px-6 shadow-sm">

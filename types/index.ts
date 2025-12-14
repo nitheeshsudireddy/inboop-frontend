@@ -5,10 +5,10 @@ export type ChannelType = 'instagram' | 'whatsapp' | 'messenger';
 export type IntentType = 'Inquiry' | 'Order' | 'Payment' | 'Delivery' | 'Issue' | 'Other';
 
 // Lead status
-export type LeadStatus = 'New' | 'In Progress' | 'Converted' | 'Closed';
+export type LeadStatus = 'New' | 'Contacted' | 'Qualified' | 'Converted' | 'Lost';
 
 // Order status
-export type OrderStatus = 'Pending' | 'Paid' | 'Shipped' | 'Cancelled';
+export type OrderStatus = 'Pending' | 'Paid' | 'Shipped' | 'Delivered' | 'Cancelled';
 
 // Message interface
 export interface Message {
@@ -57,6 +57,10 @@ export interface Lead {
   notes?: string;
   linkedOrders?: string[];
   conversationId?: string; // Link to conversation
+  assignedTo?: string; // Team member name
+  labels?: string[]; // Custom tags
+  language?: string; // Detected language
+  value?: number; // Estimated value
 }
 
 // Order interface

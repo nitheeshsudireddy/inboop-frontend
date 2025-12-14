@@ -14,6 +14,7 @@ interface User {
   name: string;
   email: string;
   role: string;
+  avatar?: string;
 }
 
 interface AuthContextType {
@@ -123,12 +124,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const redirectToApp = (accessToken: string, refreshToken: string) => {
     if (isProduction) {
       // Cross-subdomain redirect with tokens
-      const url = new URL('/inbox', APP_URL);
+      const url = new URL('/home', APP_URL);
       url.searchParams.set('token', accessToken);
       url.searchParams.set('refresh', refreshToken);
       window.location.href = url.toString();
     } else {
-      router.push('/inbox');
+      router.push('/home');
     }
   };
 

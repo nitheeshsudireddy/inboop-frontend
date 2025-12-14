@@ -1,16 +1,30 @@
 'use client';
 
+import { useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import ConversationList from '@/components/inbox/ConversationList';
 import { ChatView } from '@/components/inbox/ChatView';
 import { LeadSnapshot } from '@/components/inbox/LeadSnapshot';
 import { mockMessages } from '@/lib/mockData';
 import { useUIStore } from '@/stores/useUIStore';
 import { useConversationStore } from '@/stores/useConversationStore';
-import { ConversationStatus } from '@/types';
+import { ConversationStatus, LeadStatus } from '@/types';
 
 export default function InboxPage() {
+  const searchParams = useSearchParams();
   const { selectedConversationId, setSelectedConversationId } = useUIStore();
   const { conversations, setConversationVIP, setConversationStatus } = useConversationStore();
+
+  // Check for conversation from URL query params (when coming from leads page)
+  useEffect(() => {
+    const conversationFromUrl = searchParams.get('conversation');
+    if (conversationFromUrl) {
+      const conversationExists = conversations.some(c => c.id === conversationFromUrl);
+      if (conversationExists) {
+        setSelectedConversationId(conversationFromUrl);
+      }
+    }
+  }, [searchParams, conversations, setSelectedConversationId]);
 
   const selectedConversation = selectedConversationId
     ? conversations.find((c) => c.id === selectedConversationId) || null
@@ -24,9 +38,10 @@ export default function InboxPage() {
     }
   };
 
-  const handleStatusChange = (status: ConversationStatus) => {
+  const handleStatusChange = (status: LeadStatus) => {
     if (selectedConversationId) {
-      setConversationStatus(selectedConversationId, status);
+      // TODO: Update lead status via API
+      console.log('Lead status changed:', selectedConversationId, status);
     }
   };
 

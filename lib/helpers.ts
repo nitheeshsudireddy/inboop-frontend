@@ -20,22 +20,34 @@ export function formatMessageTime(date: Date): string {
 
 export function getIntentColor(intent: IntentType): string {
   const colors: Record<IntentType, string> = {
-    Inquiry: 'bg-blue-500 text-white border-blue-600',
-    Order: 'bg-emerald-500 text-white border-emerald-600',
-    Payment: 'bg-amber-500 text-white border-amber-600',
-    Delivery: 'bg-purple-500 text-white border-purple-600',
-    Issue: 'bg-rose-500 text-white border-rose-600',
-    Other: 'bg-slate-500 text-white border-slate-600',
+    Inquiry: 'bg-blue-50 text-blue-700 border border-blue-200',
+    Order: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+    Payment: 'bg-yellow-50 text-yellow-700 border border-yellow-200',
+    Delivery: 'bg-purple-50 text-purple-700 border border-purple-200',
+    Issue: 'bg-red-50 text-red-700 border border-red-200',
+    Other: 'bg-gray-50 text-gray-700 border border-gray-200',
   };
   return colors[intent];
 }
 
 export function getLeadStatusColor(status: LeadStatus): string {
   const colors: Record<LeadStatus, string> = {
-    'New': 'bg-blue-500 text-white',
-    'In Progress': 'bg-amber-500 text-white',
-    'Converted': 'bg-emerald-500 text-white',
-    'Closed': 'bg-slate-500 text-white',
+    'New': 'bg-blue-100 text-blue-700 border border-blue-200',
+    'Contacted': 'bg-amber-100 text-amber-700 border border-amber-200',
+    'Qualified': 'bg-emerald-100 text-emerald-700 border border-emerald-200',
+    'Converted': 'bg-purple-100 text-purple-700 border border-purple-200',
+    'Lost': 'bg-slate-100 text-slate-600 border border-slate-200',
+  };
+  return colors[status];
+}
+
+export function getLeadStatusDot(status: LeadStatus): string {
+  const colors: Record<LeadStatus, string> = {
+    'New': 'bg-blue-500',
+    'Contacted': 'bg-amber-500',
+    'Qualified': 'bg-emerald-500',
+    'Converted': 'bg-purple-500',
+    'Lost': 'bg-slate-400',
   };
   return colors[status];
 }
@@ -45,6 +57,7 @@ export function getOrderStatusColor(status: OrderStatus): string {
     'Pending': 'bg-amber-500 text-white',
     'Paid': 'bg-blue-500 text-white',
     'Shipped': 'bg-emerald-500 text-white',
+    'Delivered': 'bg-green-600 text-white',
     'Cancelled': 'bg-rose-500 text-white',
   };
   return colors[status];

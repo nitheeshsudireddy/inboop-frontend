@@ -2,10 +2,10 @@
 
 import Image from 'next/image';
 import { Search, Bell } from 'lucide-react';
-import { useAuthStore } from '@/stores/useAuthStore';
+import { useAuth } from '@/contexts/AuthContext';
 
 export function GlobalHeader() {
-  const { user } = useAuthStore();
+  const { user } = useAuth();
 
   const getInitials = (name?: string) => {
     if (!name) return '?';
