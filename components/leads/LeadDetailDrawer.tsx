@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { X, MessageSquare, ShoppingCart, ExternalLink, Save, Instagram, Phone, MessageCircle } from 'lucide-react';
 import { getIntentColor, getLeadStatusColor, getLeadStatusDot, getInitials, formatMessageTime } from '@/lib/helpers';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
 interface LeadDetailDrawerProps {
@@ -19,6 +20,7 @@ interface LeadDetailDrawerProps {
 }
 
 export function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProps) {
+  const router = useRouter();
   const [status, setStatus] = useState<LeadStatus>(lead?.status || 'New');
   const [originalStatus, setOriginalStatus] = useState<LeadStatus>(lead?.status || 'New');
   const [notes, setNotes] = useState(lead?.notes || '');
@@ -60,6 +62,16 @@ export function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProps) {
 
   const handleClose = () => {
     onClose();
+  };
+
+  const handleOpenChat = () => {
+    if (lead?.conversationId) {
+      // Navigate to inbox with the conversation selected
+      router.push(`/inbox?conversation=${lead.conversationId}`);
+    } else {
+      // If no conversation linked, just go to inbox
+      router.push('/inbox');
+    }
   };
 
   const getChannelIcon = (channel: string) => {
@@ -242,7 +254,10 @@ export function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProps) {
             </button>
           )}
           <div className="flex gap-3">
-            <button className="flex-1 py-2.5 px-4 bg-gray-100 hover:bg-gray-200 rounded-xl text-sm font-medium text-gray-700 transition-colors flex items-center justify-center gap-2">
+            <button
+              onClick={handleOpenChat}
+              className="flex-1 py-2.5 px-4 bg-gray-100 hover:bg-gray-200 rounded-xl text-sm font-medium text-gray-700 transition-colors flex items-center justify-center gap-2"
+            >
               <MessageSquare className="w-4 h-4" />
               Open Chat
             </button>

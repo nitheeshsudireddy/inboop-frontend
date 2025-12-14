@@ -35,10 +35,13 @@ export function LeadSnapshot({
   onStatusChange,
 }: LeadSnapshotProps) {
   const router = useRouter();
-  const { leads, addLead, getLead } = useLeadStore();
+  const { leads, addLead, getLead, updateLead } = useLeadStore();
 
-  // Get the lead associated with this conversation
-  const lead = conversation ? leads.find(l => l.conversationId === conversation.id) : null;
+  // Get the most recent lead associated with this conversation
+  // A conversation can have multiple leads over time, we find the most recent one
+  const lead = conversation
+    ? leads.find(l => l.conversationId === conversation.id)
+    : null;
 
   // Get status from lead, default to 'New'
   const [status, setStatus] = useState<LeadStatus>(lead?.status ?? 'New');
@@ -145,10 +148,9 @@ export function LeadSnapshot({
   };
 
   const handleViewLead = () => {
-    // Find the lead associated with this conversation
-    const matchedLead = leads.find(l => l.conversationId === conversation?.id);
-    if (matchedLead) {
-      router.push(`/leads?selected=${matchedLead.id}`);
+    // Use the already computed lead from the component
+    if (lead) {
+      router.push(`/leads?selected=${lead.id}`);
     } else {
       // If no lead exists, just go to leads page
       router.push('/leads');
@@ -498,10 +500,22 @@ export function LeadSnapshot({
                   type="text"
                   value={leadValue}
                   onChange={(e) => setLeadValue(e.target.value)}
-                  onBlur={() => setIsEditingValue(false)}
+                  onBlur={() => {
+                    setIsEditingValue(false);
+                    // Update the lead in the store
+                    if (lead) {
+                      const numValue = leadValue.trim() ? parseFloat(leadValue.replace(/[^0-9.]/g, '')) : undefined;
+                      updateLead(lead.id, { value: numValue });
+                    }
+                  }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       setIsEditingValue(false);
+                      // Update the lead in the store
+                      if (lead) {
+                        const numValue = leadValue.trim() ? parseFloat(leadValue.replace(/[^0-9.]/g, '')) : undefined;
+                        updateLead(lead.id, { value: numValue });
+                      }
                     }
                   }}
                   autoFocus
@@ -511,8 +525,8 @@ export function LeadSnapshot({
               </div>
             ) : (
               <div
-                onClick={() => setIsEditingValue(true)}
-                className="text-gray-900 text-sm font-medium cursor-pointer hover:text-gray-600 transition-colors"
+                onClick={() => lead && setIsEditingValue(true)}
+                className={`text-gray-900 text-sm font-medium ${lead ? 'cursor-pointer hover:text-gray-600' : ''} transition-colors`}
               >
                 ${leadValue}
               </div>

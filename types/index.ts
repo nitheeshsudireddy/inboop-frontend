@@ -25,8 +25,10 @@ export interface Message {
 export type ConversationStatus = 'New' | 'Active' | 'Converted' | 'Closed';
 
 // Conversation interface
+// One conversation can have many leads over time (same customer, different inquiries)
 export interface Conversation {
   id: string;
+  businessId?: string; // For multi-tenant support
   channel: ChannelType;
   customerHandle: string; // @username for IG, phone for WhatsApp, name for Messenger
   customerName?: string; // Display name
