@@ -37,7 +37,7 @@ const statusFilters: LeadStatus[] = ['New', 'Contacted', 'Qualified', 'Converted
 
 export default function LeadsPage() {
   const searchParams = useSearchParams();
-  const { leads, deleteLead } = useLeadStore();
+  const { leads, deleteLead, updateLead } = useLeadStore();
   const [selectedLeadId, setSelectedLeadId] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<LeadStatus | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -62,6 +62,11 @@ export default function LeadsPage() {
         setSelectedLeadId(null);
       }
     }
+  };
+
+  // Handle update lead value
+  const handleUpdateLeadValue = (leadId: string, value: number | undefined) => {
+    updateLead(leadId, { value });
   };
 
   // Calculate metrics
@@ -371,7 +376,7 @@ export default function LeadsPage() {
                 key={selectedLead.id}
                 className="h-full animate-in fade-in slide-in-from-right-2 duration-200 ease-out"
               >
-                <LeadDetailPanel lead={selectedLead} onClose={() => setSelectedLeadId(null)} onDelete={handleDeleteLead} />
+                <LeadDetailPanel lead={selectedLead} onClose={() => setSelectedLeadId(null)} onDelete={handleDeleteLead} onUpdateValue={handleUpdateLeadValue} />
               </div>
             ) : (
             <div className="h-full flex flex-col items-center justify-center text-center p-8 animate-in fade-in duration-200">
@@ -421,7 +426,7 @@ const getMockTimelineNotes = (leadId: string): TimelineNote[] => {
 };
 
 // Inline Lead Detail Panel Component
-function LeadDetailPanel({ lead, onClose, onDelete }: { lead: Lead; onClose: () => void; onDelete: (id: string) => void }) {
+function LeadDetailPanel({ lead, onClose, onDelete, onUpdateValue }: { lead: Lead; onClose: () => void; onDelete: (id: string) => void; onUpdateValue: (id: string, value: number | undefined) => void }) {
   const router = useRouter();
   const [status, setStatus] = useState<LeadStatus>(lead.status);
   const [labels, setLabels] = useState<string[]>(lead.labels || []);
@@ -429,6 +434,10 @@ function LeadDetailPanel({ lead, onClose, onDelete }: { lead: Lead; onClose: () 
   const [showLabelInput, setShowLabelInput] = useState(false);
   const [originalStatus, setOriginalStatus] = useState<LeadStatus>(lead.status);
   const [originalLabels, setOriginalLabels] = useState<string[]>(lead.labels || []);
+
+  // Lead value editing state
+  const [isEditingValue, setIsEditingValue] = useState(false);
+  const [valueInput, setValueInput] = useState(lead.value?.toString() || '');
 
   // Timeline notes state
   const [timelineNotes, setTimelineNotes] = useState<TimelineNote[]>(() => getMockTimelineNotes(lead.id));
@@ -444,10 +453,28 @@ function LeadDetailPanel({ lead, onClose, onDelete }: { lead: Lead; onClose: () 
     setNewLabel('');
     setTimelineNotes(getMockTimelineNotes(lead.id));
     setNewNote('');
-  }, [lead.id]);
+    setIsEditingValue(false);
+    setValueInput(lead.value?.toString() || '');
+  }, [lead.id, lead.value]);
 
   const labelsChanged = JSON.stringify(labels.sort()) !== JSON.stringify(originalLabels.sort());
   const hasChanges = status !== originalStatus || labelsChanged;
+
+  const handleValueSave = () => {
+    const numValue = valueInput.trim() ? parseFloat(valueInput.replace(/[^0-9.]/g, '')) : undefined;
+    onUpdateValue(lead.id, numValue);
+    setIsEditingValue(false);
+  };
+
+  const handleValueKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleValueSave();
+    } else if (e.key === 'Escape') {
+      setValueInput(lead.value?.toString() || '');
+      setIsEditingValue(false);
+    }
+  };
 
   const handleAddLabel = () => {
     const trimmedLabel = newLabel.trim();
@@ -584,9 +611,29 @@ function LeadDetailPanel({ lead, onClose, onDelete }: { lead: Lead; onClose: () 
         <div className="grid grid-cols-2 gap-3 pb-6">
           <div className="p-3 bg-gray-50/80 rounded-xl">
             <p className="text-xs text-gray-400 mb-1">Lead Value</p>
-            <p className="text-lg font-semibold text-gray-900">
-              {lead.value ? `$${lead.value.toLocaleString()}` : '—'}
-            </p>
+            {isEditingValue ? (
+              <div className="flex items-center">
+                <span className="text-lg font-semibold text-gray-900">$</span>
+                <input
+                  type="text"
+                  value={valueInput}
+                  onChange={(e) => setValueInput(e.target.value)}
+                  onBlur={handleValueSave}
+                  onKeyDown={handleValueKeyDown}
+                  autoFocus
+                  placeholder="0"
+                  className="w-full text-lg font-semibold text-gray-900 bg-white border border-gray-300 rounded-lg px-2 py-0.5 focus:outline-none focus:ring-2 focus:ring-[#2F5D3E] focus:border-[#2F5D3E]"
+                />
+              </div>
+            ) : (
+              <p
+                onClick={() => setIsEditingValue(true)}
+                className="text-lg font-semibold text-gray-900 cursor-pointer hover:text-[#2F5D3E] transition-colors"
+                title="Click to edit"
+              >
+                {lead.value ? `$${lead.value.toLocaleString()}` : '—'}
+              </p>
+            )}
           </div>
           <div className="p-3 bg-gray-50/80 rounded-xl">
             <p className="text-xs text-gray-400 mb-1">Type</p>

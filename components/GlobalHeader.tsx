@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { Search, Bell } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -20,7 +21,7 @@ export function GlobalHeader() {
   return (
     <header className="h-16 bg-[#212121] flex items-center justify-between pr-8">
       {/* Left: Brand */}
-      <div className="flex items-center">
+      <Link href="/home" className="flex items-center hover:opacity-90 transition-opacity">
         <div className="w-20 flex items-center justify-center">
           <Image
             src="/images/SimpleLogo.png"
@@ -31,7 +32,7 @@ export function GlobalHeader() {
           />
         </div>
         <span className="text-[#2F5D3E] font-semibold text-xl -ml-4">Inboop</span>
-      </div>
+      </Link>
 
       {/* Right: Icon buttons */}
       <div className="flex items-center gap-2">
