@@ -41,8 +41,11 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
+          port: ${{ secrets.VPS_PORT || 22 }}
           username: ${{ secrets.VPS_USERNAME }}
           password: ${{ secrets.VPS_PASSWORD }}
+          timeout: 60s
+          command_timeout: 30m
           script: |
             cd /var/www/inboop-frontend
             git pull origin master
