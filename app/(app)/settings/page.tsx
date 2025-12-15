@@ -19,6 +19,7 @@ import {
   Loader2
 } from 'lucide-react';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/stores/useToastStore';
 import { cn } from '@/lib/utils';
 
@@ -61,17 +62,36 @@ function Toggle({ enabled, onChange }: { enabled: boolean; onChange: (value: boo
 }
 
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = useState<TabId>('integrations');
-  const { instagramConnection, setInstagramConnection } = useAuthStore();
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  // Get initial tab from URL or default to 'profile'
+  const getInitialTab = (): TabId => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam && ['profile', 'workspace', 'notifications', 'integrations', 'billing'].includes(tabParam)) {
+      return tabParam as TabId;
+    }
+    return 'profile';
+  };
+
+  const [activeTab, setActiveTab] = useState<TabId>(getInitialTab);
+  const { instagramConnection, setInstagramConnection } = useAuthStore();
+  const { user } = useAuth();
+
   // Profile state
-  const [profileName, setProfileName] = useState('John Doe');
-  const [profileEmail, setProfileEmail] = useState('john@example.com');
-  const [profilePhone, setProfilePhone] = useState('+1 234 567 8900');
+  const [profileName, setProfileName] = useState('');
+  const [profileEmail, setProfileEmail] = useState('');
+  const [profilePhone, setProfilePhone] = useState('');
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileSaved, setProfileSaved] = useState(false);
+
+  // Initialize profile from user data
+  useEffect(() => {
+    if (user) {
+      setProfileName(user.name || '');
+      setProfileEmail(user.email || '');
+    }
+  }, [user]);
 
   // Workspace state
   const [brandName, setBrandName] = useState('');
@@ -92,6 +112,14 @@ export default function SettingsPage() {
   const [whatsappPhone, setWhatsappPhone] = useState('+1 555 123 4567');
   const [facebookConnected, setFacebookConnected] = useState(false);
   const [facebookPage, setFacebookPage] = useState('Inboop Official');
+
+  // Handle tab from URL param
+  useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam && ['profile', 'workspace', 'notifications', 'integrations', 'billing'].includes(tabParam)) {
+      setActiveTab(tabParam as TabId);
+    }
+  }, [searchParams]);
 
   // Handle OAuth callback
   useEffect(() => {
@@ -157,7 +185,9 @@ export default function SettingsPage() {
 
             <div className="mt-6 flex items-center gap-6">
               <div className="w-20 h-20 rounded-full bg-[#2F5D3E] flex items-center justify-center">
-                <span style={{ fontSize: '24px', fontWeight: 600, color: 'white' }}>JD</span>
+                <span style={{ fontSize: '24px', fontWeight: 600, color: 'white' }}>
+                  {user?.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || '?'}
+                </span>
               </div>
               <div>
                 <button className="px-4 py-2 bg-gray-100 rounded-xl" style={{ fontSize: '14px', fontWeight: 500, color: '#374151' }}>

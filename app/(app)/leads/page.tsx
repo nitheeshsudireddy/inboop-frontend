@@ -32,16 +32,22 @@ import {
   formatCurrency,
   formatMessageTime,
 } from '@/lib/helpers';
+import { Skeleton, SkeletonCard, SkeletonLeadRow, SkeletonDetailPanel } from '@/components/ui/skeleton';
 
 const statusFilters: LeadStatus[] = ['New', 'Contacted', 'Qualified', 'Converted', 'Lost'];
 
 export default function LeadsPage() {
   const searchParams = useSearchParams();
-  const { leads, deleteLead, updateLead } = useLeadStore();
+  const { leads, deleteLead, updateLead, isLoading, fetchLeads } = useLeadStore();
   const [selectedLeadId, setSelectedLeadId] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<LeadStatus | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+
+  // Fetch leads on mount
+  useEffect(() => {
+    fetchLeads();
+  }, [fetchLeads]);
 
   // Check for selected lead from URL query params
   useEffect(() => {
@@ -114,86 +120,97 @@ export default function LeadsPage() {
   return (
     <div className="flex h-full flex-col bg-[#F8F9FA]">
       {/* Page Header */}
-      <div className="px-8 pt-6 pb-4">
-        <div className="flex items-center justify-between mb-6">
+      <div className="px-4 md:px-8 pt-4 md:pt-6 pb-4">
+        <div className="flex items-center justify-between mb-4 md:mb-6">
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Leads</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Track, qualify, and convert your leads</p>
+            <h1 className="text-xl md:text-2xl font-semibold text-gray-900">Leads</h1>
+            <p className="text-xs md:text-sm text-gray-500 mt-0.5">Track, qualify, and convert your leads</p>
           </div>
           <button
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-white text-sm font-medium transition-all duration-150 ease-out shadow-md hover:shadow-lg hover:brightness-110 hover:-translate-y-[1px]"
+            className="inline-flex items-center gap-2 px-3 md:px-4 py-2 md:py-2.5 rounded-xl text-white text-sm font-medium transition-all duration-150 ease-out shadow-md hover:shadow-lg hover:brightness-110 hover:-translate-y-[1px]"
             style={{
               background: 'linear-gradient(180deg, #2F5D3E 0%, #285239 100%)',
             }}
           >
             <Plus className="w-4 h-4" />
-            Add Lead
+            <span className="hidden sm:inline">Add Lead</span>
           </button>
         </div>
 
         {/* Metrics Cards */}
-        <div className="grid grid-cols-4 gap-4 mb-6">
-          {/* Total Leads */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 transition-all duration-150 ease-out hover:shadow-md hover:-translate-y-[2px] cursor-default">
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-                <Users className="w-5 h-5 text-blue-600" />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-4 md:mb-6">
+          {isLoading ? (
+            <>
+              <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonCard />
+            </>
+          ) : (
+            <>
+              {/* Total Leads */}
+              <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 transition-all duration-150 ease-out hover:shadow-md hover:-translate-y-[2px] cursor-default">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+                    <Users className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <span className="flex items-center gap-1 text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">
+                    <ArrowUpRight className="w-3 h-3" />
+                    12%
+                  </span>
+                </div>
+                <p className="text-2xl font-semibold text-gray-900">{metrics.total}</p>
+                <p className="text-sm text-gray-500 mt-0.5">Total Leads</p>
               </div>
-              <span className="flex items-center gap-1 text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">
-                <ArrowUpRight className="w-3 h-3" />
-                12%
-              </span>
-            </div>
-            <p className="text-2xl font-semibold text-gray-900">{metrics.total}</p>
-            <p className="text-sm text-gray-500 mt-0.5">Total Leads</p>
-          </div>
 
-          {/* New This Week */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 transition-all duration-150 ease-out hover:shadow-md hover:-translate-y-[2px] cursor-default">
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-emerald-600" />
+              {/* New This Week */}
+              <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 transition-all duration-150 ease-out hover:shadow-md hover:-translate-y-[2px] cursor-default">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
+                    <TrendingUp className="w-5 h-5 text-emerald-600" />
+                  </div>
+                  <span className="flex items-center gap-1 text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">
+                    <ArrowUpRight className="w-3 h-3" />
+                    8%
+                  </span>
+                </div>
+                <p className="text-2xl font-semibold text-gray-900">{metrics.newThisWeek}</p>
+                <p className="text-sm text-gray-500 mt-0.5">New This Week</p>
               </div>
-              <span className="flex items-center gap-1 text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">
-                <ArrowUpRight className="w-3 h-3" />
-                8%
-              </span>
-            </div>
-            <p className="text-2xl font-semibold text-gray-900">{metrics.newThisWeek}</p>
-            <p className="text-sm text-gray-500 mt-0.5">New This Week</p>
-          </div>
 
-          {/* Qualified */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 transition-all duration-150 ease-out hover:shadow-md hover:-translate-y-[2px] cursor-default">
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center">
-                <Target className="w-5 h-5 text-purple-600" />
+              {/* Qualified */}
+              <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 transition-all duration-150 ease-out hover:shadow-md hover:-translate-y-[2px] cursor-default">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center">
+                    <Target className="w-5 h-5 text-purple-600" />
+                  </div>
+                </div>
+                <p className="text-2xl font-semibold text-gray-900">{metrics.qualified}</p>
+                <p className="text-sm text-gray-500 mt-0.5">Qualified Leads</p>
               </div>
-            </div>
-            <p className="text-2xl font-semibold text-gray-900">{metrics.qualified}</p>
-            <p className="text-sm text-gray-500 mt-0.5">Qualified Leads</p>
-          </div>
 
-          {/* Conversion Rate */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 transition-all duration-150 ease-out hover:shadow-md hover:-translate-y-[2px] cursor-default">
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
-                <DollarSign className="w-5 h-5 text-amber-600" />
+              {/* Conversion Rate */}
+              <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 transition-all duration-150 ease-out hover:shadow-md hover:-translate-y-[2px] cursor-default">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
+                    <DollarSign className="w-5 h-5 text-amber-600" />
+                  </div>
+                  <span className="flex items-center gap-1 text-xs font-medium text-rose-600 bg-rose-50 px-2 py-1 rounded-full">
+                    <ArrowDownRight className="w-3 h-3" />
+                    3%
+                  </span>
+                </div>
+                <p className="text-2xl font-semibold text-gray-900">{metrics.conversionRate}%</p>
+                <p className="text-sm text-gray-500 mt-0.5">Conversion Rate</p>
               </div>
-              <span className="flex items-center gap-1 text-xs font-medium text-rose-600 bg-rose-50 px-2 py-1 rounded-full">
-                <ArrowDownRight className="w-3 h-3" />
-                3%
-              </span>
-            </div>
-            <p className="text-2xl font-semibold text-gray-900">{metrics.conversionRate}%</p>
-            <p className="text-sm text-gray-500 mt-0.5">Conversion Rate</p>
-          </div>
+            </>
+          )}
         </div>
 
         {/* Search and Filters Bar */}
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col md:flex-row gap-3">
           {/* Search */}
-          <div className="relative flex-1 max-w-md">
+          <div className="relative flex-1 md:max-w-md">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
@@ -204,12 +221,12 @@ export default function LeadsPage() {
             />
           </div>
 
-          {/* Status Filter Pills */}
-          <div className="flex items-center gap-2">
+          {/* Status Filter Pills - Scrollable on mobile */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-hide">
             <button
               onClick={() => setSelectedStatus(null)}
               className={cn(
-                'px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-150 ease-out',
+                'px-3 md:px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-150 ease-out whitespace-nowrap flex-shrink-0',
                 !selectedStatus
                   ? 'bg-gray-900 text-white shadow-sm'
                   : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-900 hover:border-gray-300'
@@ -222,7 +239,7 @@ export default function LeadsPage() {
                 key={status}
                 onClick={() => setSelectedStatus(status)}
                 className={cn(
-                  'px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-150 ease-out flex items-center gap-2',
+                  'px-3 md:px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-150 ease-out flex items-center gap-2 whitespace-nowrap flex-shrink-0',
                   selectedStatus === status
                     ? 'bg-gray-900 text-white shadow-sm'
                     : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-gray-900 hover:border-gray-300'
@@ -232,26 +249,26 @@ export default function LeadsPage() {
                 {status}
               </button>
             ))}
-          </div>
 
-          {/* More Filters Button */}
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center gap-2 px-3.5 py-2 bg-white border border-gray-200 rounded-xl text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 hover:border-gray-300 transition-all duration-150 ease-out"
-          >
-            <Filter className="w-4 h-4" />
-            Filters
-            <ChevronDown className={cn('w-4 h-4 transition-transform duration-200', showFilters && 'rotate-180')} />
-          </button>
+            {/* More Filters Button */}
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex items-center gap-2 px-3 md:px-3.5 py-2 bg-white border border-gray-200 rounded-xl text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 hover:border-gray-300 transition-all duration-150 ease-out whitespace-nowrap flex-shrink-0"
+            >
+              <Filter className="w-4 h-4" />
+              <span className="hidden sm:inline">Filters</span>
+              <ChevronDown className={cn('w-4 h-4 transition-transform duration-200', showFilters && 'rotate-180')} />
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Master-Detail Layout - Only for table area */}
-      <div className="flex-1 overflow-hidden flex">
+      <div className="flex-1 overflow-hidden flex relative">
         {/* Table Section */}
-        <div className="flex-1 flex flex-col min-w-0 border-r border-gray-200 bg-gray-50">
-          {/* Table Header */}
-          <div className="py-2.5 bg-white border-b border-gray-200">
+        <div className="flex-1 flex flex-col min-w-0 md:border-r border-gray-200 bg-gray-50">
+          {/* Table Header - Hidden on mobile */}
+          <div className="hidden md:block py-2.5 bg-white border-b border-gray-200">
             <div className="p-2">
               <div className="grid grid-cols-[1fr_90px_80px_1fr_70px] gap-4 text-xs font-medium uppercase tracking-wider px-4 ml-[3px]">
                 <div className="text-gray-700">Lead</div>
@@ -265,7 +282,13 @@ export default function LeadsPage() {
 
             {/* Table Body */}
             <div className="flex-1 overflow-y-auto">
-              {filteredLeads.length === 0 ? (
+              {isLoading ? (
+                <div className="p-2 space-y-1">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <SkeletonLeadRow key={i} />
+                  ))}
+                </div>
+              ) : filteredLeads.length === 0 ? (
                 <div className="py-16 text-center">
                   <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gray-100 flex items-center justify-center">
                     <Users className="w-8 h-8 text-gray-400" />
@@ -280,7 +303,7 @@ export default function LeadsPage() {
                       key={lead.id}
                       onClick={() => setSelectedLeadId(lead.id)}
                       className={cn(
-                        'grid grid-cols-[1fr_90px_80px_1fr_70px] gap-4 px-4 py-3 items-center cursor-pointer rounded-lg border-l-[3px] transition-all duration-150 ease-out',
+                        'md:grid md:grid-cols-[1fr_90px_80px_1fr_70px] gap-4 px-4 py-3 items-center cursor-pointer rounded-lg border-l-[3px] transition-all duration-150 ease-out',
                         selectedLeadId === lead.id
                           ? `bg-white shadow-md ${getPlatformBorderColor(lead.channel)}`
                           : 'bg-transparent hover:bg-white hover:shadow-sm hover:-translate-y-[1px] border-l-transparent'
@@ -306,16 +329,27 @@ export default function LeadsPage() {
                             {getChannelIcon(lead.channel, 14)}
                           </div>
                         </div>
-                        <div className="min-w-0">
-                          <p className="font-semibold text-gray-900 truncate text-sm">
-                            {lead.customerName || lead.customerHandle}
-                          </p>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <p className="font-semibold text-gray-900 truncate text-sm">
+                              {lead.customerName || lead.customerHandle}
+                            </p>
+                            {/* Status badge - Mobile only inline */}
+                            <span className={cn(
+                              'md:hidden inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-xs font-semibold',
+                              getLeadStatusColor(lead.status)
+                            )}>
+                              {lead.status}
+                            </span>
+                          </div>
                           <p className="text-xs text-gray-500 truncate">@{lead.customerHandle}</p>
+                          {/* Last message preview - Mobile only */}
+                          <p className="md:hidden text-xs text-gray-400 truncate mt-1">{lead.lastMessageSnippet}</p>
                         </div>
                       </div>
 
-                      {/* Status - Primary emphasis */}
-                      <div>
+                      {/* Status - Primary emphasis - Hidden on mobile */}
+                      <div className="hidden md:block">
                         <span className={cn(
                           'inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-semibold',
                           getLeadStatusColor(lead.status)
@@ -324,8 +358,8 @@ export default function LeadsPage() {
                         </span>
                       </div>
 
-                      {/* Intent Type - Secondary emphasis */}
-                      <div>
+                      {/* Intent Type - Secondary emphasis - Hidden on mobile */}
+                      <div className="hidden md:block">
                         <span className={cn(
                           'inline-flex px-2 py-0.5 rounded-full text-xs font-medium',
                           getIntentColor(lead.intent)
@@ -334,14 +368,14 @@ export default function LeadsPage() {
                         </span>
                       </div>
 
-                      {/* Last Activity - De-emphasized */}
-                      <div className="min-w-0">
+                      {/* Last Activity - De-emphasized - Hidden on mobile */}
+                      <div className="hidden md:block min-w-0">
                         <p className="text-sm text-gray-500 truncate">{lead.lastMessageSnippet}</p>
                         <p className="text-xs text-gray-400 mt-0.5">{formatRelativeTime(lead.lastMessageTime)}</p>
                       </div>
 
-                      {/* Assigned To - De-emphasized */}
-                      <div>
+                      {/* Assigned To - De-emphasized - Hidden on mobile */}
+                      <div className="hidden md:block">
                         {lead.assignedTo ? (
                           <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center" title={lead.assignedTo}>
                             <span className="text-xs font-medium text-gray-500">
@@ -360,7 +394,7 @@ export default function LeadsPage() {
 
           {/* Table Footer */}
           {filteredLeads.length > 0 && (
-            <div className="px-5 py-3 bg-white border-t border-gray-200 flex items-center justify-between">
+            <div className="px-4 md:px-5 py-3 bg-white border-t border-gray-200 flex items-center justify-between">
               <p className="text-sm text-gray-500">
                 Showing <span className="font-medium text-gray-900">{filteredLeads.length}</span> of{' '}
                 <span className="font-medium text-gray-900">{leads.length}</span> leads
@@ -369,9 +403,17 @@ export default function LeadsPage() {
           )}
         </div>
 
-        {/* Detail Panel - Always visible, width matches 1/4 of content (same as metrics cards) */}
-        <div className="w-[calc(25%-12px)] min-w-[320px] flex-shrink-0 bg-white overflow-hidden">
-            {selectedLead ? (
+        {/* Detail Panel - Desktop: side panel, Mobile: full-screen overlay */}
+        <div className={cn(
+          'bg-white overflow-hidden',
+          // Desktop styles
+          'hidden md:block md:w-[calc(25%-12px)] md:min-w-[320px] md:flex-shrink-0',
+          // Mobile styles - full screen overlay when lead selected
+          selectedLead && 'fixed inset-0 z-50 block md:relative md:inset-auto'
+        )}>
+            {isLoading ? (
+              <SkeletonDetailPanel />
+            ) : selectedLead ? (
               <div
                 key={selectedLead.id}
                 className="h-full animate-in fade-in slide-in-from-right-2 duration-200 ease-out"

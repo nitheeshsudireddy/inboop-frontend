@@ -6,6 +6,7 @@ import { GlobalHeader } from "@/components/GlobalHeader";
 import { Sidebar } from "@/components/Sidebar";
 import { ToastContainer } from "@/components/ui/toast";
 import { useAuth } from '@/contexts/AuthContext';
+import { SidebarProvider } from '@/contexts/SidebarContext';
 
 const MARKETING_URL = process.env.NEXT_PUBLIC_MARKETING_URL || 'https://inboop.com';
 
@@ -41,15 +42,17 @@ export default function AppLayout({
   }
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-[#212121]">
-      <GlobalHeader />
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
-        <main className="flex-1 overflow-hidden">
-          {children}
-        </main>
+    <SidebarProvider>
+      <div className="flex h-screen flex-col overflow-hidden bg-[#212121]">
+        <GlobalHeader />
+        <div className="flex flex-1 overflow-hidden">
+          <Sidebar />
+          <main className="flex-1 overflow-hidden">
+            {children}
+          </main>
+        </div>
+        <ToastContainer />
       </div>
-      <ToastContainer />
-    </div>
+    </SidebarProvider>
   );
 }

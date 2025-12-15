@@ -8,16 +8,8 @@ interface AuthState {
   setInstagramConnection: (connection: InstagramConnection) => void;
 }
 
-// Default mock user for development
-const defaultUser: User = {
-  id: '1',
-  name: 'John Doe',
-  email: 'john@example.com',
-  avatar: undefined,
-};
-
 export const useAuthStore = create<AuthState>((set) => ({
-  user: defaultUser,
+  user: null,
   instagramConnection: {
     isConnected: false,
   },
