@@ -82,9 +82,9 @@ export default function PrivacyPolicyPage() {
             {/* Section 1 */}
             <section id="introduction" className="mb-10 scroll-mt-24">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Introduction</h2>
-              <div className="p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg mb-4">
-                <p className="text-sm text-blue-800 font-medium">Key Points:</p>
-                <ul className="text-sm text-blue-700 mt-1 space-y-1">
+              <div className="p-4 bg-green-50 border-l-4 border-green-600 rounded-r-lg mb-4">
+                <p className="text-sm text-green-800 font-medium">Key Points:</p>
+                <ul className="text-sm text-green-700 mt-1 space-y-1">
                   <li>• This policy explains how we handle your data</li>
                   <li>• By using Inboop, you agree to this policy</li>
                 </ul>
@@ -103,9 +103,9 @@ export default function PrivacyPolicyPage() {
             {/* Section 2 */}
             <section id="information-collected" className="mb-10 scroll-mt-24">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">2. Information We Collect</h2>
-              <div className="p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg mb-4">
-                <p className="text-sm text-blue-800 font-medium">Key Points:</p>
-                <ul className="text-sm text-blue-700 mt-1 space-y-1">
+              <div className="p-4 bg-green-50 border-l-4 border-green-600 rounded-r-lg mb-4">
+                <p className="text-sm text-green-800 font-medium">Key Points:</p>
+                <ul className="text-sm text-green-700 mt-1 space-y-1">
                   <li>• Personal info you provide (name, email, business details)</li>
                   <li>• Social media data when you connect accounts</li>
                   <li>• Automatic data (device info, usage patterns)</li>
@@ -149,9 +149,9 @@ export default function PrivacyPolicyPage() {
             {/* Section 3 */}
             <section id="legal-basis" className="mb-10 scroll-mt-24">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">3. Legal Basis for Processing</h2>
-              <div className="p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg mb-4">
-                <p className="text-sm text-blue-800 font-medium">Key Points:</p>
-                <ul className="text-sm text-blue-700 mt-1 space-y-1">
+              <div className="p-4 bg-green-50 border-l-4 border-green-600 rounded-r-lg mb-4">
+                <p className="text-sm text-green-800 font-medium">Key Points:</p>
+                <ul className="text-sm text-green-700 mt-1 space-y-1">
                   <li>• We process data to provide our service (contract)</li>
                   <li>• We ask consent where required by law</li>
                   <li>• You can withdraw consent anytime</li>
@@ -174,9 +174,9 @@ export default function PrivacyPolicyPage() {
             {/* Section 4 */}
             <section id="how-we-use" className="mb-10 scroll-mt-24">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">4. How We Use Your Information</h2>
-              <div className="p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg mb-4">
-                <p className="text-sm text-blue-800 font-medium">Key Points:</p>
-                <ul className="text-sm text-blue-700 mt-1 space-y-1">
+              <div className="p-4 bg-green-50 border-l-4 border-green-600 rounded-r-lg mb-4">
+                <p className="text-sm text-green-800 font-medium">Key Points:</p>
+                <ul className="text-sm text-green-700 mt-1 space-y-1">
                   <li>• Provide and improve our CRM service</li>
                   <li>• AI-powered message classification</li>
                   <li>• Security and fraud prevention</li>
@@ -199,9 +199,9 @@ export default function PrivacyPolicyPage() {
             {/* Section 5 */}
             <section id="cookies" className="mb-10 scroll-mt-24">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">5. Cookies and Tracking Technologies</h2>
-              <div className="p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg mb-4">
-                <p className="text-sm text-blue-800 font-medium">Key Points:</p>
-                <ul className="text-sm text-blue-700 mt-1 space-y-1">
+              <div className="p-4 bg-green-50 border-l-4 border-green-600 rounded-r-lg mb-4">
+                <p className="text-sm text-green-800 font-medium">Key Points:</p>
+                <ul className="text-sm text-green-700 mt-1 space-y-1">
                   <li>• Essential cookies required for functionality</li>
                   <li>• Google Analytics for usage insights</li>
                   <li>• You can opt-out via browser settings</li>
@@ -241,9 +241,9 @@ export default function PrivacyPolicyPage() {
             {/* Section 6 */}
             <section id="data-sharing" className="mb-10 scroll-mt-24">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">6. Data Sharing and Disclosure</h2>
-              <div className="p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg mb-4">
-                <p className="text-sm text-blue-800 font-medium">Key Points:</p>
-                <ul className="text-sm text-blue-700 mt-1 space-y-1">
+              <div className="p-4 bg-green-50 border-l-4 border-green-600 rounded-r-lg mb-4">
+                <p className="text-sm text-green-800 font-medium">Key Points:</p>
+                <ul className="text-sm text-green-700 mt-1 space-y-1">
                   <li>• We never sell your personal data</li>
                   <li>• Shared only with essential service providers</li>
                   <li>• Legal disclosure only when required</li>
@@ -263,9 +263,9 @@ export default function PrivacyPolicyPage() {
             {/* Section 7 */}
             <section id="international-transfers" className="mb-10 scroll-mt-24">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">7. International Data Transfers</h2>
-              <div className="p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg mb-4">
-                <p className="text-sm text-blue-800 font-medium">Key Points:</p>
-                <ul className="text-sm text-blue-700 mt-1 space-y-1">
+              <div className="p-4 bg-green-50 border-l-4 border-green-600 rounded-r-lg mb-4">
+                <p className="text-sm text-green-800 font-medium">Key Points:</p>
+                <ul className="text-sm text-green-700 mt-1 space-y-1">
                   <li>• Data hosted on AWS (United States)</li>
                   <li>• Protected by Standard Contractual Clauses</li>
                   <li>• Encrypted in transit and at rest</li>
@@ -291,9 +291,9 @@ export default function PrivacyPolicyPage() {
             {/* Section 8 */}
             <section id="data-security" className="mb-10 scroll-mt-24">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">8. Data Security</h2>
-              <div className="p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg mb-4">
-                <p className="text-sm text-blue-800 font-medium">Key Points:</p>
-                <ul className="text-sm text-blue-700 mt-1 space-y-1">
+              <div className="p-4 bg-green-50 border-l-4 border-green-600 rounded-r-lg mb-4">
+                <p className="text-sm text-green-800 font-medium">Key Points:</p>
+                <ul className="text-sm text-green-700 mt-1 space-y-1">
                   <li>• Industry-standard encryption</li>
                   <li>• Regular security assessments</li>
                   <li>• Secure server infrastructure</li>
@@ -310,9 +310,9 @@ export default function PrivacyPolicyPage() {
             {/* Section 9 */}
             <section id="data-retention" className="mb-10 scroll-mt-24">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">9. Data Retention</h2>
-              <div className="p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg mb-4">
-                <p className="text-sm text-blue-800 font-medium">Key Points:</p>
-                <ul className="text-sm text-blue-700 mt-1 space-y-1">
+              <div className="p-4 bg-green-50 border-l-4 border-green-600 rounded-r-lg mb-4">
+                <p className="text-sm text-green-800 font-medium">Key Points:</p>
+                <ul className="text-sm text-green-700 mt-1 space-y-1">
                   <li>• Clear retention periods for each data type</li>
                   <li>• Data deleted or anonymized after expiry</li>
                   <li>• Request early deletion anytime</li>
@@ -365,9 +365,9 @@ export default function PrivacyPolicyPage() {
             {/* Section 10 */}
             <section id="your-rights" className="mb-10 scroll-mt-24">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">10. Your Rights</h2>
-              <div className="p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg mb-4">
-                <p className="text-sm text-blue-800 font-medium">Key Points:</p>
-                <ul className="text-sm text-blue-700 mt-1 space-y-1">
+              <div className="p-4 bg-green-50 border-l-4 border-green-600 rounded-r-lg mb-4">
+                <p className="text-sm text-green-800 font-medium">Key Points:</p>
+                <ul className="text-sm text-green-700 mt-1 space-y-1">
                   <li>• Access, correct, or delete your data</li>
                   <li>• Export your data in portable format</li>
                   <li>• We respond within 30 days</li>
@@ -402,9 +402,9 @@ export default function PrivacyPolicyPage() {
             {/* Section 11 */}
             <section id="third-party" className="mb-10 scroll-mt-24">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">11. Third-Party Services</h2>
-              <div className="p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg mb-4">
-                <p className="text-sm text-blue-800 font-medium">Key Points:</p>
-                <ul className="text-sm text-blue-700 mt-1 space-y-1">
+              <div className="p-4 bg-green-50 border-l-4 border-green-600 rounded-r-lg mb-4">
+                <p className="text-sm text-green-800 font-medium">Key Points:</p>
+                <ul className="text-sm text-green-700 mt-1 space-y-1">
                   <li>• We integrate with Meta (Instagram, Facebook, WhatsApp)</li>
                   <li>• Third-party policies apply to their services</li>
                 </ul>
@@ -419,9 +419,9 @@ export default function PrivacyPolicyPage() {
             {/* Section 12 */}
             <section id="children" className="mb-10 scroll-mt-24">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">12. Children&apos;s Privacy</h2>
-              <div className="p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg mb-4">
-                <p className="text-sm text-blue-800 font-medium">Key Points:</p>
-                <ul className="text-sm text-blue-700 mt-1 space-y-1">
+              <div className="p-4 bg-green-50 border-l-4 border-green-600 rounded-r-lg mb-4">
+                <p className="text-sm text-green-800 font-medium">Key Points:</p>
+                <ul className="text-sm text-green-700 mt-1 space-y-1">
                   <li>• Service not intended for users under 18</li>
                   <li>• We delete data if collected from minors</li>
                 </ul>
@@ -436,9 +436,9 @@ export default function PrivacyPolicyPage() {
             {/* Section 13 */}
             <section id="changes" className="mb-10 scroll-mt-24">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">13. Changes to This Policy</h2>
-              <div className="p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg mb-4">
-                <p className="text-sm text-blue-800 font-medium">Key Points:</p>
-                <ul className="text-sm text-blue-700 mt-1 space-y-1">
+              <div className="p-4 bg-green-50 border-l-4 border-green-600 rounded-r-lg mb-4">
+                <p className="text-sm text-green-800 font-medium">Key Points:</p>
+                <ul className="text-sm text-green-700 mt-1 space-y-1">
                   <li>• We&apos;ll notify you of material changes via email</li>
                   <li>• Check the &quot;Last updated&quot; date for recent changes</li>
                 </ul>
