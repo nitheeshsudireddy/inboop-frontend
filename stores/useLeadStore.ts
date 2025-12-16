@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { Lead } from '@/types';
-import { mockLeads as initialLeads } from '@/lib/mockData';
 
 interface LeadState {
   leads: Lead[];
@@ -34,8 +33,10 @@ export const useLeadStore = create<LeadState>((set, get) => ({
   getLead: (id) => get().leads.find((lead) => lead.id === id),
   fetchLeads: async () => {
     set({ isLoading: true });
-    // Simulate API call - replace with actual API call later
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    set({ leads: initialLeads, isLoading: false });
+    // TODO: Replace with actual API call
+    // const response = await fetch('/api/leads');
+    // const data = await response.json();
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    set({ leads: [], isLoading: false });
   },
 }));

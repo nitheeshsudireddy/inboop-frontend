@@ -288,12 +288,31 @@ export default function LeadsPage() {
                     <SkeletonLeadRow key={i} />
                   ))}
                 </div>
+              ) : leads.length === 0 ? (
+                <div className="py-16 text-center px-4">
+                  <div className="w-20 h-20 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-[#2F5D3E]/10 to-[#2F5D3E]/5 flex items-center justify-center">
+                    <Target className="w-10 h-10 text-[#2F5D3E]" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No leads yet</h3>
+                  <p className="text-sm text-gray-500 max-w-sm mx-auto mb-6">
+                    Connect your Instagram account and start receiving DMs to see leads here automatically.
+                  </p>
+                  <a
+                    href="/settings?tab=integrations"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-white text-sm font-medium transition-all duration-150 ease-out shadow-md hover:shadow-lg hover:brightness-110"
+                    style={{
+                      background: 'linear-gradient(180deg, #2F5D3E 0%, #285239 100%)',
+                    }}
+                  >
+                    Connect Instagram
+                  </a>
+                </div>
               ) : filteredLeads.length === 0 ? (
                 <div className="py-16 text-center">
                   <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gray-100 flex items-center justify-center">
-                    <Users className="w-8 h-8 text-gray-400" />
+                    <Search className="w-8 h-8 text-gray-400" />
                   </div>
-                  <p className="text-gray-900 font-medium">No leads found</p>
+                  <p className="text-gray-900 font-medium">No leads match your filters</p>
                   <p className="text-sm text-gray-500 mt-1">Try adjusting your search or filters</p>
                 </div>
               ) : (

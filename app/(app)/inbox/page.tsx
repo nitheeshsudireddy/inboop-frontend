@@ -2,19 +2,19 @@
 
 import { useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { MessageSquare, Instagram } from 'lucide-react';
 import ConversationList from '@/components/inbox/ConversationList';
 import { ChatView } from '@/components/inbox/ChatView';
 import { LeadSnapshot } from '@/components/inbox/LeadSnapshot';
-import { mockMessages } from '@/lib/mockData';
 import { useUIStore } from '@/stores/useUIStore';
 import { useConversationStore } from '@/stores/useConversationStore';
-import { ConversationStatus, LeadStatus } from '@/types';
+import { LeadStatus } from '@/types';
 import { SkeletonConversation, SkeletonMessage, SkeletonDetailPanel, Skeleton } from '@/components/ui/skeleton';
 
 export default function InboxPage() {
   const searchParams = useSearchParams();
   const { selectedConversationId, setSelectedConversationId } = useUIStore();
-  const { conversations, setConversationVIP, setConversationStatus, isLoading, fetchConversations } = useConversationStore();
+  const { conversations, setConversationVIP, isLoading, fetchConversations } = useConversationStore();
 
   // Fetch conversations on mount
   useEffect(() => {
@@ -36,7 +36,8 @@ export default function InboxPage() {
     ? conversations.find((c) => c.id === selectedConversationId) || null
     : null;
 
-  const messages = selectedConversationId ? mockMessages[selectedConversationId] || [] : [];
+  // TODO: Fetch messages from API when conversation is selected
+  const messages: never[] = [];
 
   const handleVIPChange = (isVIP: boolean) => {
     if (selectedConversationId) {
@@ -91,6 +92,38 @@ export default function InboxPage() {
         {/* Lead snapshot skeleton */}
         <div className="w-[320px] flex-shrink-0 border-l bg-white overflow-hidden">
           <SkeletonDetailPanel />
+        </div>
+      </div>
+    );
+  }
+
+  // Empty state when no conversations
+  if (conversations.length === 0) {
+    return (
+      <div className="flex h-full overflow-hidden">
+        <div className="flex-1 flex items-center justify-center bg-[#F8F9FA]">
+          <div className="text-center px-4 max-w-md">
+            <div className="w-20 h-20 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-[#2F5D3E]/10 to-[#2F5D3E]/5 flex items-center justify-center">
+              <MessageSquare className="w-10 h-10 text-[#2F5D3E]" />
+            </div>
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">Your inbox is empty</h2>
+            <p className="text-sm text-gray-500 mb-6">
+              Connect your Instagram account to start receiving and managing DMs from your customers.
+            </p>
+            <a
+              href="/settings?tab=integrations"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-medium transition-all duration-150 ease-out shadow-md hover:shadow-lg hover:brightness-110"
+              style={{
+                background: 'linear-gradient(180deg, #2F5D3E 0%, #285239 100%)',
+              }}
+            >
+              <Instagram className="w-4 h-4" />
+              Connect Instagram
+            </a>
+            <p className="text-xs text-gray-400 mt-4">
+              Messages will appear here automatically once connected
+            </p>
+          </div>
         </div>
       </div>
     );

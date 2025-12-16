@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { Conversation, ConversationStatus } from '@/types';
-import { mockConversations } from '@/lib/mockData';
 
 interface ConversationState {
   conversations: Conversation[];
@@ -36,8 +35,10 @@ export const useConversationStore = create<ConversationState>((set, get) => ({
   getConversation: (id) => get().conversations.find((c) => c.id === id),
   fetchConversations: async () => {
     set({ isLoading: true });
-    // Simulate API call - replace with actual API call later
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    set({ conversations: mockConversations, isLoading: false });
+    // TODO: Replace with actual API call
+    // const response = await fetch('/api/conversations');
+    // const data = await response.json();
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    set({ conversations: [], isLoading: false });
   },
 }));
