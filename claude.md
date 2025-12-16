@@ -21,8 +21,8 @@ This file provides guidance to Claude Code when working with the Inboop frontend
 # Install dependencies
 npm install
 
-# Run development server
-npm run dev
+# Run development server (always use port 3000)
+npm run dev -- -p 3000
 
 # Build for production
 npm run build
@@ -30,6 +30,12 @@ npm run build
 # Run linting
 npm run lint
 ```
+
+## Important Development Rules
+
+1. **Always run on port 3000** - Use `npm run dev -- -p 3000` for consistency
+2. **Always build locally before pushing** - Run `npm run build` to catch SSR/build errors before pushing to remote
+3. **Suspense boundaries** - Wrap `useSearchParams()` in Suspense boundaries for Next.js static export compatibility
 
 ## Project Structure
 
