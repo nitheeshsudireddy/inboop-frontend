@@ -331,10 +331,6 @@ export default function SettingsPage() {
   const [isVerifying, setIsVerifying] = useState(false);
   const [verifySuccess, setVerifySuccess] = useState(false);
   const [showHelpSection, setShowHelpSection] = useState(false);
-  const [whatsappConnected, setWhatsappConnected] = useState(false);
-  const [whatsappPhone, setWhatsappPhone] = useState('+1 555 123 4567');
-  const [facebookConnected, setFacebookConnected] = useState(false);
-  const [facebookPage, setFacebookPage] = useState('Inboop Official');
 
   // Handle tab from URL param
   useEffect(() => {
@@ -1135,43 +1131,20 @@ export default function SettingsPage() {
                   <div>
                     <div className="flex items-center gap-2">
                       <span style={{ fontSize: '16px', fontWeight: 600, color: '#111' }}>WhatsApp</span>
-                      {whatsappConnected && (
-                        <span className="w-2 h-2 rounded-full bg-[#2F5D3E]" />
-                      )}
                     </div>
                     <div style={{ fontSize: '13px', color: '#6B7280', marginTop: '2px' }}>
-                      {whatsappConnected
-                        ? whatsappPhone
-                        : 'Connect WhatsApp Business to manage conversations'
-                      }
+                      Connect WhatsApp Business to manage conversations
                     </div>
                   </div>
                 </div>
-                {whatsappConnected ? (
-                  <button
-                    onClick={() => setWhatsappConnected(false)}
-                    className="px-4 py-2 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
-                    style={{ fontSize: '14px', fontWeight: 500, color: '#374151' }}
-                  >
-                    Disconnect
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setWhatsappConnected(true)}
-                    className="px-4 py-2 bg-[#2F5D3E] rounded-xl hover:bg-[#264a32] transition-colors"
-                    style={{ fontSize: '14px', fontWeight: 500, color: 'white' }}
-                  >
-                    Connect
-                  </button>
-                )}
+                <button
+                  disabled
+                  className="px-4 py-2 bg-gray-100 rounded-xl cursor-not-allowed"
+                  style={{ fontSize: '14px', fontWeight: 500, color: '#9CA3AF' }}
+                >
+                  Coming Soon
+                </button>
               </div>
-              {whatsappConnected && (
-                <div className="mt-4 pt-4 border-t border-gray-100">
-                  <div style={{ fontSize: '12px', color: '#9CA3AF' }}>
-                    Connected on Dec 10, 2024
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Facebook Card */}
@@ -1184,43 +1157,20 @@ export default function SettingsPage() {
                   <div>
                     <div className="flex items-center gap-2">
                       <span style={{ fontSize: '16px', fontWeight: 600, color: '#111' }}>Facebook</span>
-                      {facebookConnected && (
-                        <span className="w-2 h-2 rounded-full bg-[#2F5D3E]" />
-                      )}
                     </div>
                     <div style={{ fontSize: '13px', color: '#6B7280', marginTop: '2px' }}>
-                      {facebookConnected
-                        ? facebookPage
-                        : 'Connect your Facebook Page to manage Messenger'
-                      }
+                      Connect your Facebook Page to manage Messenger
                     </div>
                   </div>
                 </div>
-                {facebookConnected ? (
-                  <button
-                    onClick={() => setFacebookConnected(false)}
-                    className="px-4 py-2 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
-                    style={{ fontSize: '14px', fontWeight: 500, color: '#374151' }}
-                  >
-                    Disconnect
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setFacebookConnected(true)}
-                    className="px-4 py-2 bg-[#2F5D3E] rounded-xl hover:bg-[#264a32] transition-colors"
-                    style={{ fontSize: '14px', fontWeight: 500, color: 'white' }}
-                  >
-                    Connect
-                  </button>
-                )}
+                <button
+                  disabled
+                  className="px-4 py-2 bg-gray-100 rounded-xl cursor-not-allowed"
+                  style={{ fontSize: '14px', fontWeight: 500, color: '#9CA3AF' }}
+                >
+                  Coming Soon
+                </button>
               </div>
-              {facebookConnected && (
-                <div className="mt-4 pt-4 border-t border-gray-100">
-                  <div style={{ fontSize: '12px', color: '#9CA3AF' }}>
-                    Connected on Dec 8, 2024
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         );
