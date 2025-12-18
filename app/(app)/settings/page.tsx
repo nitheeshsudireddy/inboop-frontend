@@ -73,6 +73,9 @@ interface IntegrationStatusResponse {
     label: string;
     url?: string;
   }>;
+  actions?: {
+    reconnectUrl?: string;
+  };
 }
 
 // Map reason codes to user-friendly messages
@@ -177,15 +180,16 @@ const getDiagnoseContent = (reason: IntegrationReason | undefined, retryAt?: str
     case 'ADMIN_COOLDOWN':
       return {
         title: 'Waiting Period Active',
-        description: retryAt
-          ? `New admins must wait before connecting. Try again on ${formatRetryDate(retryAt)}.`
-          : 'New admins must wait up to 7 days before connecting.',
+        description: 'New admins must wait before connecting. This is a security measure.',
         checklist: [
           { label: 'You were recently added as page admin', checked: true },
           { label: 'Wait for the cooldown period to end', checked: false },
           { label: 'Try reconnecting after the wait', checked: false },
         ],
-        primaryAction: { label: 'Waiting...', type: 'wait' },
+        primaryAction: {
+          label: retryAt ? `Available ${formatRetryDate(retryAt)}` : 'Waiting...',
+          type: 'wait'
+        },
         helpText: 'This is a security measure. The waiting period helps protect your account.',
       };
     case 'TOKEN_EXPIRED':
@@ -475,7 +479,13 @@ export default function SettingsPage() {
       window.open(url, '_blank', 'noopener,noreferrer');
     } else if (actionType === 'reconnect') {
       closeFixWizard();
-      handleConnectInstagram();
+      // Use reconnectUrl from API response if available, otherwise use default connect flow
+      const reconnectUrl = instagramStatus?.actions?.reconnectUrl;
+      if (reconnectUrl) {
+        window.location.href = reconnectUrl;
+      } else {
+        handleConnectInstagram();
+      }
     }
     // 'wait' type does nothing - button is disabled
   };
@@ -947,12 +957,12 @@ export default function SettingsPage() {
                           </div>
                         </div>
 
-                        {/* Primary Action */}
-                        <div className="flex gap-3 mb-4">
+                        {/* Primary Action - Single CTA per reason */}
+                        <div className="mb-4">
                           {content.primaryAction.type === 'external' && (
                             <button
                               onClick={() => handleWizardPrimaryAction('external', content.primaryAction.url)}
-                              className="flex-1 px-4 py-3 bg-[#2F5D3E] rounded-xl hover:bg-[#264a32] transition-colors flex items-center justify-center gap-2"
+                              className="w-full px-4 py-3 bg-[#2F5D3E] rounded-xl hover:bg-[#264a32] transition-colors flex items-center justify-center gap-2"
                               style={{ fontSize: '14px', fontWeight: 500, color: 'white' }}
                             >
                               {content.primaryAction.label}
@@ -963,7 +973,7 @@ export default function SettingsPage() {
                             <button
                               onClick={() => handleWizardPrimaryAction('reconnect')}
                               disabled={isConnectingInstagram}
-                              className="flex-1 px-4 py-3 bg-[#2F5D3E] rounded-xl hover:bg-[#264a32] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                              className="w-full px-4 py-3 bg-[#2F5D3E] rounded-xl hover:bg-[#264a32] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                               style={{ fontSize: '14px', fontWeight: 500, color: 'white' }}
                             >
                               {isConnectingInstagram ? (
@@ -977,19 +987,23 @@ export default function SettingsPage() {
                           {content.primaryAction.type === 'wait' && (
                             <button
                               disabled
-                              className="flex-1 px-4 py-3 bg-gray-100 rounded-xl cursor-not-allowed flex items-center justify-center gap-2"
+                              className="w-full px-4 py-3 bg-gray-100 rounded-xl cursor-not-allowed flex items-center justify-center gap-2"
                               style={{ fontSize: '14px', fontWeight: 500, color: '#9CA3AF' }}
                             >
                               <Clock className="w-4 h-4" />
                               {content.primaryAction.label}
                             </button>
                           )}
+                        </div>
+
+                        {/* Secondary action to verify */}
+                        <div className="flex gap-3 mb-4">
                           <button
                             onClick={() => setWizardStep('verify')}
-                            className="px-4 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+                            className="flex-1 px-4 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
                             style={{ fontSize: '14px', fontWeight: 500, color: '#374151' }}
                           >
-                            Next
+                            I completed the steps
                           </button>
                         </div>
 
