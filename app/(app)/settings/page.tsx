@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
   User,
@@ -194,23 +194,8 @@ export default function SettingsPage() {
     }
   }, [searchParams]);
 
-  // Handle OAuth callback
-  useEffect(() => {
-    const instagramConnected = searchParams.get('instagram_connected');
-    const instagramError = searchParams.get('instagram_error');
-
-    if (instagramConnected === 'true') {
-      handleOAuthSuccess();
-      router.replace('/settings?tab=integrations', { scroll: false });
-    } else if (instagramError) {
-      toast.error('Connection Failed', decodeURIComponent(instagramError));
-      router.replace('/settings?tab=integrations', { scroll: false });
-      setActiveTab('integrations');
-      setIsConnectingInstagram(false);
-    }
-  }, [searchParams, router]);
-
-  const fetchInstagramStatus = async () => {
+  // Define fetchInstagramStatus first since handleOAuthSuccess depends on it
+  const fetchInstagramStatus = useCallback(async () => {
     setIsLoadingStatus(true);
     setStatusError(false);
     try {
@@ -244,9 +229,9 @@ export default function SettingsPage() {
     } finally {
       setIsLoadingStatus(false);
     }
-  };
+  }, [setInstagramConnection]);
 
-  const handleOAuthSuccess = async () => {
+  const handleOAuthSuccess = useCallback(async () => {
     const data = await fetchInstagramStatus();
 
     if (data?.status === 'CONNECTED_READY') {
@@ -257,14 +242,30 @@ export default function SettingsPage() {
 
     setActiveTab('integrations');
     setIsConnectingInstagram(false);
-  };
+  }, [fetchInstagramStatus]);
+
+  // Handle OAuth callback
+  useEffect(() => {
+    const instagramConnected = searchParams.get('instagram_connected');
+    const instagramError = searchParams.get('instagram_error');
+
+    if (instagramConnected === 'true') {
+      handleOAuthSuccess();
+      router.replace('/settings?tab=integrations', { scroll: false });
+    } else if (instagramError) {
+      toast.error('Connection Failed', decodeURIComponent(instagramError));
+      router.replace('/settings?tab=integrations', { scroll: false });
+      setActiveTab('integrations');
+      setIsConnectingInstagram(false);
+    }
+  }, [searchParams, router, handleOAuthSuccess]);
 
   // Fetch status on mount and when tab changes to integrations
   useEffect(() => {
     if (activeTab === 'integrations') {
       fetchInstagramStatus();
     }
-  }, [activeTab]);
+  }, [activeTab, fetchInstagramStatus]);
 
   const handleConnectInstagram = async () => {
     setIsConnectingInstagram(true);
@@ -548,7 +549,7 @@ export default function SettingsPage() {
                     <div>
                       <div style={{ fontSize: '16px', fontWeight: 600, color: '#111' }}>Instagram</div>
                       <div style={{ fontSize: '13px', color: '#EF4444', marginTop: '2px' }}>
-                        Couldn't check Instagram status. Try again.
+                        Could not check Instagram status. Try again.
                       </div>
                     </div>
                   </div>
@@ -747,7 +748,7 @@ export default function SettingsPage() {
                       <div>
                         <div style={{ fontSize: '14px', fontWeight: 500, color: '#111' }}>Create a Business Page</div>
                         <div style={{ fontSize: '13px', color: '#6B7280', marginTop: '2px' }}>
-                          Go to Meta and create a Business Page if you haven't already.
+                          Go to Meta and create a Business Page if you have not already.
                         </div>
                       </div>
                     </li>
