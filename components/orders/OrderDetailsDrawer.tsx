@@ -16,7 +16,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { ExtendedOrder, OrderTimelineEvent, OrderPriority } from '@/lib/orders.mock';
+import { ExtendedOrder, OrderTimelineEvent, OrderPriority, PaymentStatus } from '@/lib/orders.mock';
 import { OrderStatusBadge, ORDER_STATUS_CONFIG } from './OrderStatusBadge';
 import { getChannelIcon, getChannelName } from '@/components/shared/ChannelIcons';
 import { useState } from 'react';
@@ -51,6 +51,13 @@ const PRIORITY_CONFIG: Record<OrderPriority, { label: string; bgColor: string; t
   high: { label: 'High intent', bgColor: 'bg-amber-100', textColor: 'text-amber-700' },
   medium: { label: 'Medium intent', bgColor: 'bg-blue-50', textColor: 'text-blue-600' },
   low: { label: 'Low intent', bgColor: 'bg-gray-100', textColor: 'text-gray-500' },
+};
+
+// Payment status badge config
+const PAYMENT_STATUS_CONFIG: Record<PaymentStatus, { label: string; bgColor: string; textColor: string }> = {
+  paid: { label: 'Paid', bgColor: 'bg-emerald-50', textColor: 'text-emerald-700' },
+  unpaid: { label: 'Unpaid', bgColor: 'bg-red-50', textColor: 'text-red-600' },
+  cod: { label: 'COD', bgColor: 'bg-amber-50', textColor: 'text-amber-700' },
 };
 
 // Format currency
@@ -127,6 +134,29 @@ function PriorityChip({ priority }: { priority: OrderPriority }) {
       {config.label}
     </span>
   );
+}
+
+// Payment Status Badge Component
+function PaymentStatusBadge({ status }: { status: PaymentStatus }) {
+  const config = PAYMENT_STATUS_CONFIG[status];
+  return (
+    <span className={cn(
+      'inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold',
+      config.bgColor,
+      config.textColor
+    )}>
+      {config.label}
+    </span>
+  );
+}
+
+// Helper to parse item name and variant
+function parseItemName(name: string): { name: string; variant?: string } {
+  const match = name.match(/^(.+?)\s*\((.+)\)$/);
+  if (match) {
+    return { name: match[1].trim(), variant: match[2].trim() };
+  }
+  return { name };
 }
 
 // Copy Toast Component
@@ -308,46 +338,62 @@ export function OrderDetailsDrawer({ order, isOpen, onClose }: OrderDetailsDrawe
                 </div>
               </div>
 
-              {/* Items Section */}
+              {/* Items Section - Card Layout */}
               <div className="px-6 py-5 border-b border-gray-100">
                 <SectionHeader title="Items" icon={Package} />
-                <div className="space-y-3">
-                  {order.items.map((item) => (
-                    <div key={item.id} className="flex items-start justify-between">
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm text-gray-900">{item.name}</p>
-                        <p className="text-xs text-gray-500">
-                          {formatCurrency(item.price)} × {item.quantity}
-                        </p>
-                      </div>
-                      <p className="text-sm font-medium text-gray-900 ml-4">
-                        {formatCurrency(item.subtotal)}
-                      </p>
-                    </div>
-                  ))}
-                </div>
 
-                {/* Order Summary */}
-                <div className="mt-4 pt-4 border-t border-gray-100 space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">Subtotal</span>
-                    <span className="text-gray-700">{formatCurrency(order.totals.subtotal)}</span>
+                {/* Items Card */}
+                <div className="bg-gray-50 rounded-xl overflow-hidden">
+                  {/* Item List */}
+                  <div className="divide-y divide-gray-100">
+                    {order.items.map((item) => {
+                      const parsed = parseItemName(item.name);
+                      return (
+                        <div key={item.id} className="flex items-center justify-between px-4 py-3 bg-white">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-gray-900">{parsed.name}</p>
+                            {parsed.variant && (
+                              <p className="text-xs text-gray-500">{parsed.variant}</p>
+                            )}
+                          </div>
+                          <p className="text-sm text-gray-600 ml-4 whitespace-nowrap">
+                            {item.quantity} × {formatCurrency(item.price)}
+                          </p>
+                        </div>
+                      );
+                    })}
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">Shipping</span>
-                    <span className="text-gray-700">
-                      {order.totals.shipping === 0 ? 'Free' : formatCurrency(order.totals.shipping)}
-                    </span>
-                  </div>
-                  {order.totals.discount > 0 && (
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-500">Discount</span>
-                      <span className="text-emerald-600">-{formatCurrency(order.totals.discount)}</span>
+
+                  {/* Totals - Right Aligned */}
+                  <div className="px-4 py-3 bg-gray-50 border-t border-gray-200">
+                    <div className="space-y-1.5">
+                      <div className="flex justify-end gap-8 text-sm">
+                        <span className="text-gray-500">Subtotal</span>
+                        <span className="text-gray-700 w-24 text-right">{formatCurrency(order.totals.subtotal)}</span>
+                      </div>
+                      <div className="flex justify-end gap-8 text-sm">
+                        <span className="text-gray-500">Shipping</span>
+                        <span className="text-gray-700 w-24 text-right">
+                          {order.totals.shipping === 0 ? 'Free' : formatCurrency(order.totals.shipping)}
+                        </span>
+                      </div>
+                      {order.totals.discount > 0 && (
+                        <div className="flex justify-end gap-8 text-sm">
+                          <span className="text-gray-500">Discount</span>
+                          <span className="text-emerald-600 w-24 text-right">-{formatCurrency(order.totals.discount)}</span>
+                        </div>
+                      )}
+                      <div className="flex justify-end gap-8 text-sm font-semibold pt-2 border-t border-gray-200">
+                        <span className="text-gray-900">Total</span>
+                        <span className="text-gray-900 w-24 text-right">{formatCurrency(order.totals.total)}</span>
+                      </div>
                     </div>
-                  )}
-                  <div className="flex justify-between text-base font-semibold pt-2 border-t border-gray-100">
-                    <span className="text-gray-900">Total</span>
-                    <span className="text-gray-900">{formatCurrency(order.totals.total)}</span>
+                  </div>
+
+                  {/* Payment Status Row */}
+                  <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200">
+                    <span className="text-sm text-gray-600">Payment</span>
+                    <PaymentStatusBadge status={order.paymentStatus} />
                   </div>
                 </div>
               </div>

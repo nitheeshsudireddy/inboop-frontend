@@ -44,6 +44,9 @@ export interface OrderTimelineEvent {
 // Payment method type
 export type PaymentMethod = 'COD' | 'UPI' | 'Card' | 'Bank Transfer' | 'Pending';
 
+// Payment status type
+export type PaymentStatus = 'paid' | 'unpaid' | 'cod';
+
 // Order priority/intent type
 export type OrderPriority = 'high' | 'medium' | 'low';
 
@@ -59,6 +62,7 @@ export interface ExtendedOrder {
   trackingId?: string;
   carrier?: string;
   paymentMethod: PaymentMethod;
+  paymentStatus: PaymentStatus;
   priority?: OrderPriority;
   createdAt: Date;
   updatedAt: Date;
@@ -102,6 +106,7 @@ export const mockExtendedOrders: ExtendedOrder[] = [
     trackingId: 'DTDC123456789',
     carrier: 'DTDC Express',
     paymentMethod: 'UPI',
+    paymentStatus: 'paid',
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 48),
     updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 36),
   },
@@ -136,6 +141,7 @@ export const mockExtendedOrders: ExtendedOrder[] = [
       { id: 't5', status: 'PENDING', label: 'Awaiting payment', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 11), description: 'Payment link sent to customer' },
     ],
     paymentMethod: 'Pending',
+    paymentStatus: 'unpaid',
     priority: 'medium',
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 12),
     updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 11),
@@ -179,6 +185,7 @@ export const mockExtendedOrders: ExtendedOrder[] = [
     trackingId: 'BLR987654321',
     carrier: 'BlueDart',
     paymentMethod: 'Card',
+    paymentStatus: 'paid',
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 96),
     updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 72),
   },
@@ -211,6 +218,7 @@ export const mockExtendedOrders: ExtendedOrder[] = [
       { id: 't10', status: 'NEW', label: 'Order placed', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), description: 'Customer placed order via Instagram DM' },
     ],
     paymentMethod: 'COD',
+    paymentStatus: 'cod',
     priority: 'high',
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
     updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
@@ -251,6 +259,7 @@ export const mockExtendedOrders: ExtendedOrder[] = [
       { id: 't13', status: 'CONFIRMED', label: 'Payment confirmed', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 8), description: 'Payment received via UPI' },
     ],
     paymentMethod: 'UPI',
+    paymentStatus: 'paid',
     priority: 'high',
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 10),
     updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 8),
@@ -288,6 +297,7 @@ export const mockExtendedOrders: ExtendedOrder[] = [
       { id: 't16', status: 'CANCELLED', label: 'Order cancelled', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 48), description: 'Customer requested cancellation' },
     ],
     paymentMethod: 'Pending',
+    paymentStatus: 'unpaid',
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 72),
     updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 48),
   },
