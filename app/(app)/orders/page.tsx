@@ -146,7 +146,6 @@ export default function OrdersPage() {
     isLoading: storeLoading,
     fetchOrders,
     addOrder,
-    updateOrderStatus,
     useApi,
     setUseApi,
   } = useOrderStore();
@@ -185,7 +184,18 @@ export default function OrdersPage() {
 
   // Drawer state
   const [isCreateDrawerOpen, setIsCreateDrawerOpen] = useState(false);
-  const selectedOrderId = searchParams.get('order');
+  const selectedOrderNumber = searchParams.get('order');
+
+  // Get selected order ID for drawer (API mode uses numeric ID)
+  const selectedOrderId = useMemo(() => {
+    if (!selectedOrderNumber) return null;
+    if (useApi) {
+      // Find the order in API results to get numeric ID
+      const order = apiOrders.find((o) => o.orderNumber === selectedOrderNumber);
+      return order?.id || null;
+    }
+    return null;
+  }, [selectedOrderNumber, useApi, apiOrders]);
 
   // Enable API mode by default for authenticated users
   useEffect(() => {
@@ -309,11 +319,11 @@ export default function OrdersPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Get selected order for drawer
+  // Get selected order for drawer (mock data mode only)
   const selectedOrder = useMemo(() => {
-    if (!selectedOrderId) return null;
-    return extendedOrders.find((o) => o.orderNumber === selectedOrderId) || null;
-  }, [selectedOrderId, extendedOrders]);
+    if (!selectedOrderNumber || useApi) return null;
+    return extendedOrders.find((o) => o.orderNumber === selectedOrderNumber) || null;
+  }, [selectedOrderNumber, useApi, extendedOrders]);
 
   // Open/close drawer
   const openOrder = useCallback(
@@ -339,15 +349,6 @@ export default function OrdersPage() {
     const newUrl = params.toString() ? `/orders?${params.toString()}` : '/orders';
     router.push(newUrl, { scroll: false });
   }, [router, searchParams]);
-
-  // Handle status update
-  const handleUpdateStatus = useCallback(
-    (orderId: string, newStatus: OrderStatus) => {
-      updateOrderStatus(orderId, newStatus, getStatusLabel(newStatus));
-      toast.success('Order status updated');
-    },
-    [updateOrderStatus]
-  );
 
   // Handle create order
   const handleCreateOrder = useCallback(
@@ -1158,10 +1159,10 @@ export default function OrdersPage() {
 
       {/* Order Details Drawer */}
       <OrderDetailsDrawer
-        order={selectedOrder}
-        isOpen={!!selectedOrder}
+        orderId={selectedOrderId}
+        isOpen={!!selectedOrderNumber}
         onClose={closeOrder}
-        onUpdateStatus={handleUpdateStatus}
+        onOrderUpdated={fetchOrdersFromApi}
       />
 
       {/* Create Order Drawer */}
