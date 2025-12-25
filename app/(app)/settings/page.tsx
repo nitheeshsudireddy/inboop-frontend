@@ -920,16 +920,25 @@ export default function SettingsPage() {
                         </button>
                       )}
 
-                      {/* BLOCKED with ADMIN_COOLDOWN: Show disabled button with retry time */}
+                      {/* BLOCKED with ADMIN_COOLDOWN: Show wait message and disconnect option */}
                       {instagramStatus?.status === 'BLOCKED' && instagramStatus.reason === 'ADMIN_COOLDOWN' && (
-                        <button
-                          disabled
-                          className="px-4 py-2 bg-gray-100 rounded-xl flex items-center gap-2 cursor-not-allowed"
-                          style={{ fontSize: '14px', fontWeight: 500, color: '#9CA3AF' }}
-                        >
-                          <Clock className="w-4 h-4" />
-                          Wait Required
-                        </button>
+                        <div className="flex items-center gap-2">
+                          <button
+                            disabled
+                            className="px-4 py-2 bg-gray-100 rounded-xl flex items-center gap-2 cursor-not-allowed"
+                            style={{ fontSize: '14px', fontWeight: 500, color: '#9CA3AF' }}
+                          >
+                            <Clock className="w-4 h-4" />
+                            Wait Required
+                          </button>
+                          <button
+                            onClick={() => setShowDisconnectConfirm(true)}
+                            className="px-4 py-2 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+                            style={{ fontSize: '14px', fontWeight: 500, color: '#374151' }}
+                          >
+                            Disconnect
+                          </button>
+                        </div>
                       )}
 
                       {/* BLOCKED: Show buttons based on reason */}
@@ -967,6 +976,14 @@ export default function SettingsPage() {
                               <ChevronRight className="w-4 h-4" />
                             </button>
                           )}
+                          {/* Disconnect button - always show for blocked states to allow fresh start */}
+                          <button
+                            onClick={() => setShowDisconnectConfirm(true)}
+                            className="px-4 py-2 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+                            style={{ fontSize: '14px', fontWeight: 500, color: '#374151' }}
+                          >
+                            Disconnect
+                          </button>
                         </div>
                       )}
                     </div>
