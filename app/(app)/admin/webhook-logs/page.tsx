@@ -33,6 +33,9 @@ export default function WebhookLogsPage() {
 
   const isSuperAdmin = user?.email && SUPER_ADMIN_EMAILS.includes(user.email.toLowerCase());
 
+  // Debug: log user email to console
+  console.log('[WebhookLogs] User email:', user?.email, 'isSuperAdmin:', isSuperAdmin);
+
   const fetchLogs = async () => {
     setLoading(true);
     setError(null);
